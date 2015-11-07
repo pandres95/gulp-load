@@ -3,8 +3,7 @@ module.exports = function (dir) {
 
     var fs      = require('fs')
     ,   gulp    = require('gulp')
-    ,   path    = require('path')
-    ,   async   = require('async');
+    ,   path    = require('path');
 
     dir = path.join(process.cwd(), dir);
 
