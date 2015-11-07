@@ -1,6 +1,6 @@
 {
   "name": "gulp-folder-load",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Loads gulp tasks from a folder and returns an instance of gulp",
   "main": "index.js",
   "repository": {
@@ -15,7 +15,7 @@
   "author": "Pablo Andrés Dorado Suárez <im@pandres95.me>",
   "license": "MIT",
   "peerDependencies": {
-    "gulp": "latest"
+    "gulp": "^3.9.0"
   },
   "bugs": {
     "url": "https://github.com/pandres95/gulp-load/issues"
