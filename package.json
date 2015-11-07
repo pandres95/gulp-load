@@ -1,0 +1,24 @@
+{
+  "name": "gulp-folder-load",
+  "version": "1.0.0",
+  "description": "Loads gulp tasks from a folder and returns an instance of gulp",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pandres95/gulp-load.git"
+  },
+  "keywords": [
+    "gulp",
+    "loader",
+    "tasks"
+  ],
+  "author": "Pablo Andrés Dorado Suárez <im@pandres95.me>",
+  "license": "MIT",
+  "dependencies": {
+    "gulp": "^3.9.0"
+  },
+  "bugs": {
+    "url": "https://github.com/pandres95/gulp-load/issues"
+  },
+  "homepage": "https://github.com/pandres95/gulp-load#readme"
+}
