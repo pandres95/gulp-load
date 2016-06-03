@@ -1,25 +1,61 @@
-module.exports = function (dir) {
+function loadTasks(directory, base, environment, gulp, configuration) {
     'use strict';
 
-    var fs      = require('fs')
-    ,   gulp    = require('gulp')
-    ,   path    = require('path');
+    const FS    = require('fs');
+    const path  = require('path');
+    let results = [];
 
-    dir = path.join(process.cwd(), dir);
+    let list    = FS.readdirSync(directory);
+    let pending = list.length;
 
-    function readFile(file) {
-        file = path.join(dir, file);
+    if (!pending) return {
+        name: path.basename(directory),
+        type: 'folder',
+        children: results
+    };
 
-        if(path.extname(file) == '.js'){
-            gulp.task(path.basename(file, '.js'), require(file)(gulp));
+    list.forEach(file => {
+        let _file = path.resolve(directory, file);
+
+        let stat = FS.statSync(_file);
+        if (stat && stat.isDirectory()) {
+            let folderName  = path.basename(_file)
+            ,   _base       = `${folderName}:`;
+            results.push({
+                name: path.basename(file),
+                type: 'folder',
+                children: loadTasks(
+                    _file, _base, environment, gulp, configuration
+                )
+            });
+        } else {
+            let fileName = path.basename(_file);
+            results.push({
+                type: 'file',
+                name: fileName
+            });
+            if(path.extname(_file) === '.js'){
+                let taskName = path.basename(file, '.js');
+                gulp.task(`${base}${taskName}`, require(_file)(
+                    gulp, configuration,
+                    environment || process.env.NODE_ENV || 'local'
+                ));
+            }
         }
-    }
+    });
 
-    var files = fs.readdirSync(dir);
+    return results;
+}
 
-    for(var index in files){
-        readFile(files[index]);
-    }
+module.exports = function (directory, configuration, environment) {
+    'use strict';
+
+    const gulp  = require('gulp');
+    const path  = require('path');
+
+    let _directory = path.join(process.cwd(), directory);
+    loadTasks(_directory, '', environment, gulp, configuration, () => {});
 
     return gulp;
 };
+
