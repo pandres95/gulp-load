@@ -1,3 +1,7 @@
+/* jshint
+  node:true, strict: true, undef: true, unused: true, esnext: true,
+  laxcomma: true */
+
 function loadTasks(directory, base, environment, gulp, configuration) {
     'use strict';
 
@@ -20,7 +24,9 @@ function loadTasks(directory, base, environment, gulp, configuration) {
         let stat = FS.statSync(_file);
         if (stat && stat.isDirectory()) {
             let folderName  = path.basename(_file)
-            ,   _base       = `${folderName}:`;
+            ,   _base       = (
+                (base === '') && `${folderName}`
+            ) || `${base}:${folderName}`;
             results.push({
                 name: path.basename(file),
                 type: 'folder',
@@ -36,6 +42,11 @@ function loadTasks(directory, base, environment, gulp, configuration) {
             });
             if(path.extname(_file) === '.js'){
                 let taskName = path.basename(file, '.js');
+                if(taskName === '_') {
+                    taskName = '';
+                } else {
+                    taskName = `:${taskName}`;
+                }
                 gulp.task(`${base}${taskName}`, require(_file)(
                     gulp, configuration,
                     environment || process.env.NODE_ENV || 'local'
@@ -58,4 +69,3 @@ module.exports = function (directory, configuration, environment) {
 
     return gulp;
 };
-
